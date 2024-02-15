@@ -7,21 +7,19 @@ ROSE is a groundbreaking project aimed at onboarding Web2 entrepreneurs into the
 
 ARTHUR LABS, an expansion of this project, focuses on rapidly creating two-sided Web2 marketplaces, reducing development time drastically. By integrating with ROSE, these marketplaces can seamlessly transition into the Web3 sphere, thereby increasing Web3 user volume significantly.
 
-## Ecosystem & Bounties
-1. Utilizing Tezos Eco, with potential use of Ligo or SmartPy.
-2. Targeting all available bounties within the Tezos Ecosystem.
-Plan
-3. Initialize repository, install dependencies.
-4. Develop initial form (excluding account creation).
-5. Integrate MongoDB.
-6. Develop the NFT Contract.
-7. Modify Contract to include Terms & Conditions for listings.
-8. Implement MongoDB to URL converter.
-9. Link URL to NFT contract.
-10. Perform NFT minting tests.
-11. Prepare the presentation.
-12. Plan for marketplace expansion.
-13. # WIN
+## Plan
+1. Create repo, install deps
+2. Create form (Ignore account creation initially)
+3. Connect MongoDB
+4. Create NFT Contract 
+5. Edit Contract to view T&C Page for each listing
+6. MongoDB to URL convertor
+7. Connect URL to contract for NFT
+8. Test mint NFT
+9. Create presentation
+10. Marketplace expansion
+11. # WIN
+
 ## Presentation Outline (3 Minutes)
 1. Introduction to ROSE.
 2. Demonstration of code and MVP.
@@ -49,6 +47,7 @@ User Stories
 As a user, I want to convert a JSON snippet of my MongoDB data into an NFT.
 As a user, I want to own the NFT I create.
 Diagrams
+
 # Use Case Diagram
 ```plantuml
 !theme plain

@@ -11,13 +11,13 @@
   };
 
   let formData: FormData = {
-    name: '',
-    location: '',
-    service: '',
-    description: '',
-    price: 0,
-    email: '',
-    wallet: '',
+    name: 'Personal Photography Studio of Austin',
+    location: 'Austin, Texas',
+    service: 'Photography',
+    description: 'We sell photography services for all occasions.',
+    price: 11110,
+    email: 'example@photos.com',
+    wallet: ``,
   };
 
   const handleSubmit = async () => {
