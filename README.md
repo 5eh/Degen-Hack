@@ -1,48 +1,94 @@
-# DEGEN HACKATHON
+* https://hackmd.io/cPkKc80nTlOA9oXBQtOgWA?both -- Better ReadMe
 
-## PROBLEM
+# DEGEN HACKATHON: ROSE Project
+## Overview
 
-Onboarding Web2 entrepreneurs into Web3
+ROSE is a groundbreaking project aimed at onboarding Web2 entrepreneurs into the Web3 ecosystem. It's a NFT Smart Contract platform designed to integrate MongoDB listings into the Web3 space. This allows service providers and goods sellers worldwide to build an on-chain portfolio, showcasing authentic services/goods with immutable customer reviews. ROSE facilitates selling services on-chain, marking a new era in Web3 commerce.
 
-## IDEA 
+ARTHUR LABS, an expansion of this project, focuses on rapidly creating two-sided Web2 marketplaces, reducing development time drastically. By integrating with ROSE, these marketplaces can seamlessly transition into the Web3 sphere, thereby increasing Web3 user volume significantly.
 
-I am creating ROSE. ROSE is the flower that will bloom into onboarding real world hard working entrepreneurs into Web3, through various systems. ROSE is the NFT Smart Contract that allows for two-sided marketplaces to connect their MongoDB listings section into Web3, so anyone who is providing services/goods around the world can build an onchain portfolio; with proof they are selling authentic services/goods, with real customer reviews that are immutable, and sell their services onchain. 
+## Ecosystem & Bounties
+1. Utilizing Tezos Eco, with potential use of Ligo or SmartPy.
+2. Targeting all available bounties within the Tezos Ecosystem.
+Plan
+3. Initialize repository, install dependencies.
+4. Develop initial form (excluding account creation).
+5. Integrate MongoDB.
+6. Develop the NFT Contract.
+7. Modify Contract to include Terms & Conditions for listings.
+8. Implement MongoDB to URL converter.
+9. Link URL to NFT contract.
+10. Perform NFT minting tests.
+11. Prepare the presentation.
+12. Plan for marketplace expansion.
+13. # WIN
+## Presentation Outline (3 Minutes)
+1. Introduction to ROSE.
+2. Demonstration of code and MVP.
+3. Discussion on marketplace expansion.
+4. Real-world application scenarios.
+5. Strategy for onboarding Web2 users into Tezos Ecosystem.
+6. Concluding with the project's potential to win.
+7. Software Design: ROSE.xyz
 
-This is the future of Web3, and I am establishing this at the DEGEN HACK. 
+# Idea
 
-The expansion of this is ARTHUR LABS. ARTHUR LABS is building a system that produces Web2 two-sided marketplaces. They are reducing the time it by over 95% from 6 months to 1 week. They create marketplaces where ANY niche service can be sold on a given niche marketplace. Through ROSE we provide the onchain service, so they can scale the Web3 market and grow the daily volume of users in Web3 exponentially.
+# Problem
+The challenge lies in transitioning web3 online shops to the Web3 domain.
 
-Tezos will be at the heart of it.
+# Solution
+ROSE.xyz addresses this by offering a platform for seamless integration.
 
+# Requirements
+### Functional Requirements
+The application must convert MongoDB data into an NFT.
 
+### Non-Functional Requirements
+The application should be operational and user-friendly.
+User Stories
+As a user, I want to convert a JSON snippet of my MongoDB data into an NFT.
+As a user, I want to own the NFT I create.
+Diagrams
+# Use Case Diagram
+```plantuml
+!theme plain
+skinparam actorBorderThickness 1
+left to right direction
+title Use Case Diagram
 
-## ECOSYSTEM & BOUNTIES
+User -- (convert)
+User -- (own)
+```
 
-Working in Tezos Eco, using Ligo (maybe SmartPy, to be decided when I start that stage)
+```plantuml
+!theme plain
+title Class Diagram
+class Converter {
+    mongoData: json
+    owner: AccountId
+    do_converting(mongoData: json) -> NFT
+}
 
-Aiming for all bounties in the Eco since it's tangible for all. 
+```
 
-## PLAN
+```plantuml
+!theme plain
+title Sequence Diagram
+actor User
+entity WebApp
+database MongoDB
+entity SmartContract
 
-1. Create repo, install deps
-2. Create form (Ignore account creation initially)
-3. Connect MongoDB
-4. Create NFT Contract 
-5. Edit Contract to view T&C Page for each listing
-6. MongoDB to URL convertor
-7. Connect URL to contract for NFT
-8. Test mint NFT
-9. Create presentation
-10. Marketplace expansion
-11. # WIN
+WebApp --> SmartContract: listens
+User -> WebApp: createsService() through Input
+WebApp -> WebApp: createsListing()
+WebApp -> MongoDB: savesListing()
+MongoDB -> WebApp: confirms()
+MongoDB -> SmartContract: createsNFT()
+SmartContract -> SmartContract: mintNFT()
+WebApp -> User: if Contract, display Contract
+WebApp -> User: else, display Listing
+```
 
-## PRESENTATION (3 min)
-1. Intro to ROSE 
-2. Show code and MVP
-3. Explain marketplace expansion
-4. Explain real world use cases 
-5. Explain Web2 user onboarding into Tezos Eco
-6. # WIN
-
-## RELATED WORKS
-1. Arthur Labs Pitch Deck (The Expansion of this code into the rea world) - https://app.pitch.com/app/player/9f3011de-83be-401c-b8a9-18926402e4e7/b97e774b-560d-4748-9831-f32f9b3a69ad
+# Related Works
+Arthur Labs Pitch Deck (Expansion of ROSE in the real world) - app.pitch.com/app/player/9f3011de-83be-401c-b8a9-18926402e4e7/b97e774b-560d-4748-9831-f32f9b3a69ad
