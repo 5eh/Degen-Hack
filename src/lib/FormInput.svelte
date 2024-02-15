@@ -7,6 +7,7 @@
     description: string;
     price: number;
     email: string;
+    wallet: string;
   };
 
   let formData: FormData = {
@@ -15,7 +16,8 @@
     service: '',
     description: '',
     price: 0,
-    email: ''
+    email: '',
+    wallet: '',
   };
 
   const handleSubmit = () => {
@@ -24,7 +26,7 @@
 </script>
 
 <form on:submit|preventDefault={handleSubmit}>
-  <label for="name">Name:</label>
+  <label for="name">Name (or business):</label>14
   <input type="text" id="name" bind:value={formData.name} />
 
   <label for="location">Location:</label>
@@ -41,6 +43,9 @@
 
   <label for="email">Email:</label>
   <input type="email" id="email" bind:value={formData.email} />
+
+    <label for="wallet">Wallet:</label>
+    <input type="text" id="wallet" bind:value={formData.wallet} />
 
   <button type="submit">Submit</button>
 

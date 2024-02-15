@@ -4,7 +4,7 @@
 </script>
 
 <main>
-  <p>Hello</p>
+  <p>Locale - The Photography marketplace</p>
 
   <FormInput />
 </main>

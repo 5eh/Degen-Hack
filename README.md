@@ -1,5 +1,9 @@
 # DEGEN HACKATHON
 
+## PROBLEM
+
+Onboarding Web2 entrepreneurs into Web3
+
 ## IDEA 
 
 I am creating ROSE. ROSE is the flower that will bloom into onboarding real world hard working entrepreneurs into Web3, through various systems. ROSE is the NFT Smart Contract that allows for two-sided marketplaces to connect their MongoDB listings section into Web3, so anyone who is providing services/goods around the world can build an onchain portfolio; with proof they are selling authentic services/goods, with real customer reviews that are immutable, and sell their services onchain. 
