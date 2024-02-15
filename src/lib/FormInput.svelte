@@ -20,10 +20,31 @@
     wallet: '',
   };
 
-  const handleSubmit = () => {
-    console.log(formData); 
+  const handleSubmit = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/submitForm', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      console.log(formData)
+      const result = await response.json();
+      console.log(result);
+      alert('Form submitted successfully!');
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Failed to submit the form.'); 
+    }
   };
 </script>
+
 
 <form on:submit|preventDefault={handleSubmit}>
   <label for="name">Name (or business):</label>14
