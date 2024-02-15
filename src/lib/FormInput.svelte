@@ -21,7 +21,7 @@
   };
 
   const handleSubmit = () => {
-    console.log(formData); // Handle form submission
+    console.log(formData); 
   };
 </script>
 

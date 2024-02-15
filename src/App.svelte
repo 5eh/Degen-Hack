@@ -1,12 +1,14 @@
 <script lang="ts">
   import FormInput from './lib/FormInput.svelte';
-
+  import ConnectDatabase from './lib/ConnectDatabase.svelte';
 </script>
 
 <main>
   <p>Locale - The Photography marketplace</p>
 
   <FormInput />
+  <ConnectDatabase />
+
 </main>
 
 <style>
