@@ -1,7 +1,6 @@
 
-export const MARKETPLACE_TYPE = "REAL ESTATE"; // Type of Marketplace
-export const MARKETPLACE_NAME = "LOCALE"; // Name of Marketplace
-export const COMPANY = "Arthur Labs"; // Name of Marketplace company
+export const MARKETPLACE_TYPE = "REMODELLING"; // Type of Marketplace
+export const COMPANY = "ROSE Foundation"; // Name of Marketplace company
 
 export const SALE_PERCENTAGE_CHARGE = 0.05; // Adds a 5% charge to the sale price
 
@@ -25,3 +24,6 @@ export const WEB3_CONTRACT_ABI = "0x0";
 export const WEB3_CONTRACT_NAME = "0x0";
 export const WEB3_CONTRACT_SYMBOL = "0x0";
 export const WEB3_CONTRACT_DECIMALS = 0;
+
+
+// FORM VARIABLES

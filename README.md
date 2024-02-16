@@ -8,16 +8,16 @@ ROSE is a groundbreaking project aimed at onboarding Web2 entrepreneurs into the
 ARTHUR LABS, an expansion of this project, focuses on rapidly creating two-sided Web2 marketplaces, reducing development time drastically. By integrating with ROSE, these marketplaces can seamlessly transition into the Web3 sphere, thereby increasing Web3 user volume significantly.
 
 ## Plan
-1. Create repo, install deps
+1. Create repo, install deps  //
 2. Create form (Ignore account creation initially)
-3. Connect MongoDB
-4. Create NFT Contract 
-5. Edit Contract to view T&C Page for each listing
-6. MongoDB to URL convertor
-7. Connect URL to contract for NFT
-8. Test mint NFT
+3. Connect MongoDB / 
+4. Create NFT Contract // 
+5. Edit Contract to view T&C Page for each listing 
+6. MongoDB to URL convertor /
+7. Connect URL to contract for NFT 
+8. Test mint NFT //
 9. Create presentation
-10. Marketplace expansion
+10. Marketplace expansion /
 11. # WIN
 
 ## Presentation Outline (3 Minutes)

@@ -4,7 +4,7 @@
   import { char2Bytes, bytes2Char } from "@taquito/utils";
   import { BeaconWallet } from "@taquito/beacon-wallet";
   import { NetworkType } from "@airgap/beacon-sdk";
-  import { WEB3_RPC_URL} from "../MarketplaceVariables.js"
+  import { COMPANY, MARKETPLACE_TYPE, WEB3_RPC_URL} from "../MarketplaceVariables.js"
 
 
   let Tezos: TezosToolkit;
@@ -41,31 +41,31 @@
     | undefined
     | { imageHash: string; metadataHash: string; opHash: string };
 
-  const getUserNfts = async (address: string) => {
-    // finds user's NFTs
-    const contract = await Tezos.wallet.at(contractAddress);
-    nftStorage = await contract.storage();
+const getUserNfts = async (address: string) => {
+  const contract = await Tezos.wallet.at(contractAddress);
+  nftStorage = await contract.storage();
 
-    console.log(nftStorage)
-    console.log(address)
-    const getTokenIds = await nftStorage.reverse_ledger.get(address);
-    console.log(getTokenIds)
-    if (getTokenIds) {
-      userNfts = await Promise.all([
-        ...getTokenIds.map(async id => {
-          const tokenId = id.toNumber();
-          const metadata = await nftStorage.token_metadata.get(tokenId);
-          const tokenInfoBytes = metadata.token_info.get("");
-          const tokenInfo = bytes2Char(tokenInfoBytes);
-          return {
-            tokenId,
-            ipfsHash:
-              tokenInfo.slice(0, 7) === "ipfs://" ? tokenInfo.slice(7) : null
-          };
-        })
-      ]);
-    }
-  };
+  const getTokenIds = await nftStorage.reverse_ledger.get(address);
+  if (getTokenIds) {
+    userNfts = await Promise.all(
+      getTokenIds.map(async id => {
+        const tokenId = id.toNumber();
+        const metadata = await nftStorage.token_metadata.get(tokenId);
+        const tokenInfoBytes = metadata.token_info.get("");
+        const tokenInfo = bytes2Char(tokenInfoBytes);
+        // Assuming you have a way to get the opHash for each tokenId
+        // This might involve another call or a different data structure
+        const opHash = "opHash";
+        return {
+          tokenId,
+          opHash, // include the operation hash here
+          ipfsHash: tokenInfo.slice(0, 7) === "ipfs://" ? tokenInfo.slice(7) : null
+          // Add other properties as needed
+        };
+      })
+    );
+  }
+};
 
   const connect = async () => {
     if (!wallet) {
@@ -169,21 +169,11 @@
 
   h1 {
     font-size: 3rem;
-    font-family: "Roman-SD";
   }
 
-  button {
-    padding: 20px;
-    font-size: 1rem;
-    border: solid 3px #d1d5db;
-    background-color: #e5e7eb;
-    border-radius: 10px;
-    cursor: pointer;
-  }
-
-  .roman {
+  .trueno {
     text-transform: uppercase;
-    font-family: "Roman-SD";
+    font-family: "trueno-light";
     font-weight: bold;
   }
 
@@ -214,28 +204,33 @@
 
 <main>
   <div class="container">
-    <h1>Create NFTs</h1>
+    <h1>THE {MARKETPLACE_TYPE} MARKETPLACE</h1>
     {#if userAddress}
       <div>
         <div class="user-nfts">
-          Your NFTs:
-          {#if nftStorage}
-            [ {#each userNfts.reverse() as nft, index}
-              <a
-                href={`https://cloudflare-ipfs.com/ipfs/${nft.ipfsHash}`}
-                target="_blank"
-                rel="noopener noreferrer nofollow"
-              >
-                {nft.tokenId}
-              </a>
-              {#if index < userNfts.length - 1}
-                <span>,&nbsp;</span>
-              {/if}
-            {/each} ]
+          Your Web3 Services:
+          {#if nftStorage && userNfts.length > 0}
+            <ul>
+              {#each userNfts as nft}
+                <ol>
+                  <a
+                    href={`https://better-call.dev/ghostnet/opg/${nft.tokenId}/contents`}
+                    target="_blank"
+                    rel="noopener noreferrer nofollow"
+                  >
+                    Listing {nft.tokenId}
+                  </a>
+                  <!-- Additional NFT details can be added here -->
+                </ol>
+              {/each}
+            </ul>
+          {:else}
+            <p>No Web3 Services found for your wallet.</p>
           {/if}
         </div>
         <br />
-        <button class="roman" on:click={disconnect}>Disconnect</button>
+        <button class="trueno functionbutton" on:click={disconnect}>Log out</button>
+        <button class="trueno functionbutton" on:click={disconnect}>Change Accounts</button>
       </div>
       {#if newNft}
         <div>Your NFT has been successfully minted!</div>
@@ -267,7 +262,7 @@
           </a>
         </div>
         <div>
-          <button class="roman" on:click={() => (newNft = undefined)}>
+          <button class="trueno" on:click={() => (newNft = undefined)}>
             Mint a new NFT
           </button>
         </div>
@@ -295,17 +290,20 @@
         </div>
         <div>
           {#if pinningMetadata}
-            <button class="roman"> Saving your image... </button>
+            <button class="trueno"> Saving your image... </button>
           {:else if mintingToken}
-            <button class="roman"> Minting your NFT... </button>
+            <button class="trueno"> Minting your NFT... </button>
           {:else}
-            <button class="roman" on:click={upload}> Mint NFT </button>
+            <button class="trueno functionbutton" on:click={upload}> Create Listing </button>
           {/if}
         </div>
       {/if}
     {:else}
-      <div class="roman">Create an NFT with your pictures</div>
-      <button class="roman" on:click={connect}>Connect your wallet</button>
+    <div class="trueno">Sell your {MARKETPLACE_TYPE} services here</div>
+      <button class="trueno functionbutton" on:click={connect}>Login</button>
+      
     {/if}
   </div>
+      <p>The {COMPANY} </p>
+
 </main>

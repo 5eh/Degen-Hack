@@ -1,13 +1,19 @@
 @font-face {
-  font-family: "Roman-SD";
-  src: url("../../Roman-SD.woff") format("woff"),
-    /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */ url("../../Roman-SD.ttf")
-      format("truetype"); /* Chrome 4+, Firefox 3.5, Opera 10+, Safari 3—5 */
+  font-family: "trueno-light";
+  src: url("../../public/TruenoLt.otf") format("woff"),
+    /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+      url("../../public//TruenoLt.otf") format("truetype"); /* Chrome 4+, Firefox 3.5, Opera 10+, Safari 3—5 */
 }
+
+//  Create dark background
+$dark-background: #1a1a1a;
 
 body {
   height: 100vh;
   font-size: 1rem;
+  font-family: "trueno-light";
+  background-color: rgba(var(--dark-blue-background));
+  color: rgba(var(--light-color), 1);
 
   main {
     display: grid;
@@ -15,4 +21,109 @@ body {
     height: 100vh;
     text-align: center;
   }
+}
+
+:root {
+  --light-color: 242, 233, 228;
+  --dark-color: 29, 33, 36;
+  --button-color: 242, 233, 228; /*  93, 69, 122; #5d457a; (ALSO USE AS BORDER) */
+  --dark-button-outline: 256, 256, 256, 0.2;
+  --dark-blue-background: 6, 23, 40;
+  --glass-background: 36, 36, 36, 0.6;
+  --glass-background-hover: 36, 36, 36, 0.3;
+  --light-glass-background-hover: 178, 178, 178, 0.1;
+  --hard-glass-background-hover: 62, 62, 62, 0.5;
+}
+
+input,
+textarea,
+select,
+button {
+  border-bottom: 2px solid rgba(var(--border-color), 0.5);
+  transition: background-color 0.3s, border-color 0.3s;
+  color: rgba(var(--light-color), 1);
+  background-color: transparent;
+  outline: none;
+  border: none;
+}
+
+input, textarea {
+  border: 1px solid rgba(var(--light-color));
+}
+
+/* Placeholder color */
+input::placeholder,
+textarea::placeholder {
+  color: rgba(var(--light-color), 0.5);
+}
+
+input:focus,
+input:active textarea:focus,
+select:focus {
+  background-color: rgba(var(--button-color), 0.3);
+  border-color: rgba(var(--border-color), 1);
+}
+
+/* Hover state for input, textarea, and select */
+input:hover,
+textarea:hover,
+select:hover {
+  background-color: rgba(var(--button-color), 0.1);
+  border-color: rgba(var(--border-color), 0.7);
+}
+
+/* Hover and focus state for button */
+button:hover,
+button:focus {
+  background-color: rgba(var(--button-hover-color), 1);
+  border-color: rgba(var(--button-hover-color), 1);
+  color: rgba(var(--light-color), 1);
+}
+
+.dropdown {
+  border: 2px solid rgba(var(--button-color), 0.6);
+  background-color: rgba(var(--dark-color), 0.5);
+  box-shadow: 0 4px 14px 0 rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease;
+  color: rgba(var(--light-color));
+  backdrop-filter: blur(10px);
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  border-radius: 5px;
+  position: relative;
+  padding: 5px 10px;
+  appearance: none;
+  cursor: pointer;
+  outline: none;
+}
+
+.dropdown option {
+  background-color: rgba(var(--dark-color), 0.8);
+  color: rgba(var(--light-color));
+}
+
+.dropdown::after {
+  content: "\25BC";
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: rgba(var(--light-color));
+}
+
+.dropdown:focus {
+  box-shadow: 0 0 0 2px rgba(var(--highlight-color), 0.5);
+  border-color: rgba(var(--highlight-color), 0.75);
+}
+
+.functionbutton {
+  transition: background-color 0.3s ease-in-out, border 0.3s ease-in-out,
+    color 0.3s ease-in-out;
+  border: 1px solid rgba(var(--dark-button-outline));
+  background-color: rgba(var(--glass-background));
+  color: rgba(var(--light-color));
+  padding: 1em 1em 1em 1em;
+  margin-bottom: 1rem;
+  width: 100%;
 }
