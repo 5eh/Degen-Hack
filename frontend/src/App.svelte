@@ -28,7 +28,7 @@
     process.env.NODE_ENV !== "production"
       ? "http://localhost:8080"
       : "https://my-cool-backend-app.com";
-  const contractAddress = "KT1VbJAzSAHQMvf5HC9zfEVMPbT2UcBvaMXb";
+  const contractAddress = "KT1W6APrMVKSbPELYKx8TUsBwque5TwvRrEE";
   let nftStorage = undefined;
   let userNfts: { tokenId: number; ipfsHash: string }[] = [];
   let pinningMetadata = false;
@@ -41,6 +41,9 @@
     // finds user's NFTs
     const contract = await Tezos.wallet.at(contractAddress);
     nftStorage = await contract.storage();
+
+    console.log(nftStorage)
+    console.log(address)
     const getTokenIds = await nftStorage.reverse_ledger.get(address);
     console.log(getTokenIds)
     if (getTokenIds) {

@@ -520,6 +520,8 @@ let mint (p : mint_params) (storage : nft_token_storage) : return_value =
 let burn (p : token_id) (storage : nft_token_storage) : return_value =
     ([]: operation list), burn (p, storage)
 
+(** Add entry points here **)
+
 (*
 
 {
