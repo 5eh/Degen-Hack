@@ -214,7 +214,7 @@ const getUserNfts = async (address: string) => {
               {#each userNfts as nft}
                 <ol>
                   <a
-                    href={`https://better-call.dev/ghostnet/opg/${nft.tokenId}/contents`}
+                href={`https://cloudflare-ipfs.com/ipfs/${nft.ipfsHash}`}
                     target="_blank"
                     rel="noopener noreferrer nofollow"
                   >
