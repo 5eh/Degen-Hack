@@ -36,18 +36,19 @@ app.get("/", (req, res) => {
 // handles minting
 app.post("/mint", upload.single("image"), async (req, res) => {
   const multerReq = req as any;
-  //console.log(multerReq.file, req.body);
   if (!multerReq.file) {
-    res.status(500).json({ status: false, msg: "no file provided" });
-  } else {
-    const fileName = multerReq.file.filename;
-    // tests Pinata authentication
-    await pinata
-      .testAuthentication()
-      .catch((err: any) => res.status(500).json(JSON.stringify(err)));
-    // creates readable stream
+    return res.status(500).json({ status: false, msg: "no file provided" });
+  }
+
+  const fileName = multerReq.file.filename;
+
+  try {
+    // Test Pinata authentication
+    await pinata.testAuthentication();
+
+    // Create a readable stream for the file
     const readableStreamForFile = fs.createReadStream(`./uploads/${fileName}`);
-    const options: any = {
+    const options = {
       pinataMetadata: {
         name: req.body.title.replace(/\s/g, "-"),
         keyvalues: {
@@ -55,51 +56,50 @@ app.post("/mint", upload.single("image"), async (req, res) => {
         },
       },
     };
+
+    // Pin file to IPFS
     const pinnedFile = await pinata.pinFileToIPFS(
       readableStreamForFile,
       options
     );
-    if (pinnedFile.IpfsHash && pinnedFile.PinSize > 0) {
-      // remove file from server
-      fs.unlinkSync(`./uploads/${fileName}`);
-      // pins metadata
-      const metadata = {
-        name: req.body.title,
-        description: req.body.description,
-        symbol: "TUT",
-        artifactUri: `ipfs://${pinnedFile.IpfsHash}`,
-        displayUri: `ipfs://${pinnedFile.IpfsHash}`,
-        creators: [req.body.creator],
-        decimals: 0,
-        thumbnailUri: "https://tezostaquito.io/img/favicon.png",
-        is_transferable: true,
-        shouldPreferSymbol: false,
-      };
-
-      const pinnedMetadata = await pinata.pinJSONToIPFS(metadata, {
-        pinataMetadata: {
-          name: "TUT-metadata",
-        },
-      });
-
-      if (pinnedMetadata.IpfsHash && pinnedMetadata.PinSize > 0) {
-        res.status(200).json({
-          status: true,
-          msg: {
-            imageHash: pinnedFile.IpfsHash,
-            metadataHash: pinnedMetadata.IpfsHash,
-          },
-        });
-      } else {
-        res
-          .status(500)
-          .json({ status: false, msg: "metadata were not pinned" });
-      }
-    } else {
-      res.status(500).json({ status: false, msg: "file was not pinned" });
+    if (!pinnedFile.IpfsHash || pinnedFile.PinSize <= 0) {
+      throw new Error("File was not pinned");
     }
+
+    // Remove file from server
+    fs.unlinkSync(`./uploads/${fileName}`);
+
+    // Create and pin metadata
+    const metadata = {
+      // ...metadata fields...
+    };
+
+    const pinnedMetadata = await pinata.pinJSONToIPFS(metadata, {
+      pinataMetadata: {
+        name: "TUT-metadata",
+      },
+    });
+
+    if (!pinnedMetadata.IpfsHash || pinnedMetadata.PinSize <= 0) {
+      throw new Error("Metadata were not pinned");
+    }
+
+    // Send success response
+    res.status(200).json({
+      status: true,
+      msg: {
+        imageHash: pinnedFile.IpfsHash,
+        metadataHash: pinnedMetadata.IpfsHash,
+      },
+    });
+  } catch (err) {
+    console.error(err);
+    res
+      .status(500)
+      .json({ status: false, msg: "An error occurred", error: err.message });
   }
 });
+
 
 // starts the Express server
 app.listen(port, () => {

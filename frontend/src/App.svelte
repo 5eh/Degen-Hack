@@ -19,6 +19,10 @@
     description = "this is Uranus";
   }
 
+
+  
+
+
   const rpcUrl = "https://ghostnet.ecadinfra.com";
   const serverUrl =
     process.env.NODE_ENV !== "production"
@@ -38,6 +42,7 @@
     const contract = await Tezos.wallet.at(contractAddress);
     nftStorage = await contract.storage();
     const getTokenIds = await nftStorage.reverse_ledger.get(address);
+    console.log(getTokenIds)
     if (getTokenIds) {
       userNfts = await Promise.all([
         ...getTokenIds.map(async id => {
