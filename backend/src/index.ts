@@ -19,8 +19,8 @@ if (process.env.NODE_ENV === "production") {
 }
 
 const corsOptions = {
-  origin: ["http://localhost:5173", "https://my-cool-nft-app.com"],
-  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+  origin: ["http://localhost:5174", "https://my-cool-nft-app.com"],
+  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
 };
 app.use(cors(corsOptions));
 app.use(express.json({ limit: "50mb" }));
@@ -51,9 +51,9 @@ app.post("/mint", upload.single("image"), async (req, res) => {
       pinataMetadata: {
         name: req.body.title.replace(/\s/g, "-"),
         keyvalues: {
-          description: req.body.description
-        }
-      }
+          description: req.body.description,
+        },
+      },
     };
     const pinnedFile = await pinata.pinFileToIPFS(
       readableStreamForFile,
@@ -73,13 +73,13 @@ app.post("/mint", upload.single("image"), async (req, res) => {
         decimals: 0,
         thumbnailUri: "https://tezostaquito.io/img/favicon.png",
         is_transferable: true,
-        shouldPreferSymbol: false
+        shouldPreferSymbol: false,
       };
 
       const pinnedMetadata = await pinata.pinJSONToIPFS(metadata, {
         pinataMetadata: {
-          name: "TUT-metadata"
-        }
+          name: "TUT-metadata",
+        },
       });
 
       if (pinnedMetadata.IpfsHash && pinnedMetadata.PinSize > 0) {
@@ -87,8 +87,8 @@ app.post("/mint", upload.single("image"), async (req, res) => {
           status: true,
           msg: {
             imageHash: pinnedFile.IpfsHash,
-            metadataHash: pinnedMetadata.IpfsHash
-          }
+            metadataHash: pinnedMetadata.IpfsHash,
+          },
         });
       } else {
         res
