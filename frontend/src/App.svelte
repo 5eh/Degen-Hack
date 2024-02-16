@@ -4,6 +4,8 @@
   import { char2Bytes, bytes2Char } from "@taquito/utils";
   import { BeaconWallet } from "@taquito/beacon-wallet";
   import { NetworkType } from "@airgap/beacon-sdk";
+  import { WEB3_RPC_URL} from "../MarketplaceVariables.js"
+
 
   let Tezos: TezosToolkit;
   let wallet: BeaconWallet;
@@ -23,7 +25,9 @@
   
 
 
-  const rpcUrl = "https://ghostnet.ecadinfra.com";
+  const rpcUrl = `${WEB3_RPC_URL}`;
+
+  console.log(rpcUrl)
   const serverUrl =
     process.env.NODE_ENV !== "production"
       ? "http://localhost:8080"
