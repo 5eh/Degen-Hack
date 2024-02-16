@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import { MongoClient, ServerApiVersion } from 'mongodb';
-import submitFormHandler from './api/submitForm.js';
+import submitFormHandler from './src/api/submitForm.js';
 
 import dotenv from 'dotenv';
 
