@@ -6,18 +6,29 @@
   import { NetworkType } from "@airgap/beacon-sdk";
   import { COMPANY, MARKETPLACE_TYPE, WEB3_RPC_URL } from "../../MarketplaceVariables.js";
 
-  type ExtendedFormData = {
-    name: string;
-    location: string;
-    service: string;
-    description: string;
-    price: number;
-    email: string;
-    wallet: string;
-    title: string;
-    imageDescription: string;
-    files: FileList | null;
-  };
+type ExtendedFormData = {
+  location: string;
+  service: string;
+  description: string;
+  price: number;
+  email: string;
+  wallet: string;
+  title: string;
+  imageDescription: string;
+  files: FileList | null;
+};
+
+const initialFormData: ExtendedFormData = {
+  location: '',
+  service: '',
+  description: '',
+  price: undefined, // Assuming price is a number, not a string
+  email: '',
+  wallet: '',
+  title: '',
+  imageDescription: '',
+  files: undefined,
+};
 
   let Tezos: TezosToolkit;
   let wallet: BeaconWallet;
@@ -26,18 +37,9 @@
     preferredNetwork: NetworkType.GHOSTNET,
   };
   let userAddress: string = '';
-  let formData: ExtendedFormData = {
-    name: 'Personal Photography Studio of Austin',
-    location: 'Austin, Texas',
-    service: 'Photography',
-    description: 'We sell photography services for all occasions.',
-    price: 11110,
-    email: 'example@photos.com',
-    wallet: '',
-    title: '',
-    imageDescription: '',
-    files: null,
-  };
+
+  let formData = {...initialFormData};
+  formData = {...initialFormData};
 
   let files, title, description;
 
@@ -63,6 +65,8 @@ const serverUrl =
     wallet = new BeaconWallet(walletOptions);
     if (await wallet.client.getActiveAccount()) {
       userAddress = await wallet.getPKH();
+          console.log("User Address:", userAddress); 
+
       Tezos.setWalletProvider(wallet);
       await getUserNfts(userAddress);
     }
@@ -80,8 +84,6 @@ const getUserNfts = async (address: string) => {
         const metadata = await nftStorage.token_metadata.get(tokenId);
         const tokenInfoBytes = metadata.token_info.get("");
         const tokenInfo = bytes2Char(tokenInfoBytes);
-        // Assuming you have a way to get the opHash for each tokenId
-        // This might involve another call or a different data structure
         const opHash = "opHash";
         return {
           tokenId,
@@ -121,88 +123,61 @@ const getUserNfts = async (address: string) => {
   };
 
 
-  const upload = async () => {
-    try {
-      pinningMetadata = true;
-      const data = new FormData();
-      data.append("image", files[0]);
-      data.append("title", title);
-      data.append("description", description);
-      data.append("creator", userAddress);
+const submitToMongoDB = async () => {
+    const response = await fetch('http://localhost:5000/submitForm', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
+    });
 
-      const response = await fetch(`${serverUrl}/mint`, {
-        method: "POST",
-        headers: {
-          "Access-Control-Allow-Origin": "*"
-        },
-        body: data
-      });
-      if (response) {
-        const data = await response.json();
-        if (
-          data.status === true &&
-          data.msg.metadataHash &&
-          data.msg.imageHash
-        ) {
-          pinningMetadata = false;
-          mintingToken = true;
-          // saves NFT on-chain
-          const contract = await Tezos.wallet.at(contractAddress);
-          const op = await contract.methods
-            .mint(char2Bytes("ipfs://" + data.msg.metadataHash), userAddress)
-            .send();
-          console.log("Op hash:", op.opHash);
-          await op.confirmation();
-
-          newNft = {
-            imageHash: data.msg.imageHash,
-            metadataHash: data.msg.metadataHash,
-            opHash: op.opHash
-          };
-
-          files = undefined;
-          title = "";
-          description = "";
-
-          // refreshes storage
-          await getUserNfts(userAddress);
-        } else {
-          throw "No IPFS hash";
-        }
-      } else {
-        throw "No response";
-      }
-    } catch (error) {
-      console.log(error);
-    } finally {
-      pinningMetadata = false;
-      mintingToken = false;
+    if (!response.ok) {
+      throw new Error('Failed to submit to MongoDB');
     }
+
+    const result = await response.json();
+    console.log("MongoDB Submission Result:", result);
   };
 
+  // Function to mint NFT
+  const mintNFT = async () => {
+    const nftData = new FormData();
+    nftData.append("image", files[0]);
+    nftData.append("title", title);
+    nftData.append("description", description);
+    nftData.append("creator", userAddress);
 
+    const response = await fetch(`${serverUrl}/mint`, {
+      method: "POST",
+      headers: {
+        "Access-Control-Allow-Origin": "*"
+      },
+      body: nftData
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to mint NFT');
+    }
+
+    const data = await response.json();
+    // Handle the response from minting
+    // ...
+  };
+
+  // Combined submit handler
   const handleSubmit = async () => {
     try {
-      const response = await fetch('http://localhost:5000/submitForm', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-
-      console.log(formData)
-      const result = await response.json();
-      console.log(result);
+      await submitToMongoDB();
+      await mintNFT();
+      // Optional: Reset the form here
+      formData = {...initialFormData};
     } catch (error) {
-      console.error('Error:', error);
-      alert('Failed to submit the form.'); 
+      console.error("Error:", error);
+      alert('Failed to submit the form and/or mint NFT.');
     }
   };
+
 </script>
 
 <style lang="scss">
@@ -248,8 +223,10 @@ const getUserNfts = async (address: string) => {
     <h1>THE {MARKETPLACE_TYPE} MARKETPLACE</h1>
     {#if userAddress}
       <form on:submit|preventDefault={handleSubmit}>
-        <label for="title">Title</label>
-        <input type="text" id="title" bind:value={formData.title} />
+        <input hidden type="text" id="wallet" bind:value={userAddress} />
+        <label for="image-title">Title:</label>
+        <input type="text" id="image-title" bind:value={title} />
+
 
         <label for="location">Location:</label>
         <input type="text" id="location" bind:value={formData.location} />
@@ -258,7 +235,7 @@ const getUserNfts = async (address: string) => {
         <input type="text" id="service" bind:value={formData.service} />
 
         <label for="description">Description:</label>
-        <textarea id="description" bind:value={formData.description}></textarea>
+        <textarea id="description" bind:value={description}></textarea>
 
         <label for="price">Price:</label>
         <input type="number" id="price" bind:value={formData.price} />
@@ -266,19 +243,10 @@ const getUserNfts = async (address: string) => {
         <label for="email">Email:</label>
         <input type="email" id="email" bind:value={formData.email} />
 
-        <label for="wallet">Wallet:</label>
-        <input type="text" id="wallet" bind:value={formData.wallet} />
+        <label for="file">Select Image:</label>
+        <input type="file" id="file" bind:files />
 
-        <label for="image-title">Title:</label>
-        <input type="text" id="image-title" bind:value={title} />
-
-        <label for="image-description">Image Description:</label>
-        <textarea id="image-description" rows="4" bind:value={description} />
-
-        <label for="image-file">Select Image:</label>
-        <input type="file" id="image-file" bind:files />
-
-        <button type="submit" class="trueno" on:click={upload}>Submit</button>
+        <button type="submit" class="trueno" on:click={handleSubmit}>Submit</button>
       </form>
 
       {#if newNft}
