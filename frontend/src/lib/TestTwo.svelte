@@ -219,6 +219,7 @@ const getUserNfts = async (address: string) => {
       await getUserNfts(userAddress);
     }
   });
+  
 </script>
 
 <style lang="scss">
@@ -257,37 +258,33 @@ const getUserNfts = async (address: string) => {
       align-items: center;
     }
   }
+
+  
 </style>
 
 <main>
   <div class="container">
     <h1>THE {MARKETPLACE_TYPE} MARKETPLACE</h1>
     {#if userAddress}
-      <div>
-        <div class="user-nfts">
-          Your Web3 Services:
-          {#if nftStorage && userNfts.length > 0}
-            <ul>
-              {#each userNfts as nft}
-                <ol>
-                  <a
-                href={`https://cloudflare-ipfs.com/ipfs/${nft.ipfsHash}`}
-                    target="_blank"
-                    rel="noopener noreferrer nofollow"
-                  >
-                    Listing {nft.tokenId}
-                  </a>
-                  <!-- Additional NFT details can be added here -->
-                </ol>
-              {/each}
-            </ul>
-          {:else}
-            <p>No Web3 Services found for your wallet.</p>
-          {/if}
-        </div>
+    <div>
+  <div class="user-nfts">
+    Your Web3 Services:
+    {#if nftStorage && userNfts.length > 0}
+      <select class="dropdown">
+        {#each userNfts as nft}
+          <option value={nft.tokenId}>
+            <a href={`https://cloudflare-ipfs.com/ipfs/${nft.ipfsHash}`} target="_blank" rel="noopener noreferrer nofollow">
+              Listing {nft.tokenId}
+            </a>
+          </option>
+        {/each}
+      </select>
+    {:else}
+      <p>No Web3 Services found for your wallet.</p>
+    {/if}
+</div>
         <br />
-        <button class="trueno functionbutton" on:click={disconnect}>Log out</button>
-        <button class="trueno functionbutton" on:click={disconnect}>Change Accounts</button>
+
       </div>
       {#if newNft}
         <div>Your NFT has been successfully minted!</div>
@@ -332,7 +329,7 @@ const getUserNfts = async (address: string) => {
         <div>
           <label for="image-title">
             <span>Title:</span>
-            <input type="text" id="image-title" bind:value={title} />
+            <input type="text" placeholder="Professional kitchen remodelling" id="image-title" bind:value={title} />
           </label>
         </div>
         <div>
@@ -341,6 +338,7 @@ const getUserNfts = async (address: string) => {
             <textarea
               id="image-description"
               rows="4"
+              placeholder="A professional kitchen remodelling service. We offer a full range of services from design to installation. We are a team of experienced professionals who are passionate about what we do. We are committed"
               bind:value={description}
             />
           </label>
@@ -349,7 +347,7 @@ const getUserNfts = async (address: string) => {
         <div>
           <label for="service">
             <span>Service:</span>
-            <input type="text" id="image-title" bind:value={service} />
+            <input type="text" placeholder="Kitchen Remodelling" bind:value={service} />
 
           </label>
         </div>
@@ -406,5 +404,6 @@ const getUserNfts = async (address: string) => {
     {/if}
   </div>
       <p>The {COMPANY} </p>
-
+        <button class="trueno functionbutton" on:click={disconnect}>Log out</button>
+        <button class="trueno functionbutton" on:click={disconnect}>Change Accounts</button>
 </main>
