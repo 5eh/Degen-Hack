@@ -402,8 +402,7 @@ const getUserNfts = async (address: string) => {
       <button class="trueno functionbutton" on:click={connect}>Create Listing</button>
       
     {/if}
-  </div>
-      <p>The {COMPANY} </p>
-        <button class="trueno functionbutton" on:click={disconnect}>Log out</button>
-        <button class="trueno functionbutton" on:click={disconnect}>Change Accounts</button>
+    <p>The {COMPANY} </p>
+    <button class="trueno functionbutton" on:click={disconnect}>Change Accounts</button>
+</div>
 </main>
