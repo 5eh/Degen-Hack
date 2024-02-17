@@ -101,73 +101,9 @@ class Converter {
 }
 
 ```
+![Entrepreneurs experience](https://i.ibb.co/WywtfRm/2.png)
+![Entrepreneurs experience](https://i.ibb.co/rt0fJt6/Capture.png)
 
-```plantuml
-!theme plain
-actor ServiceBuyer
-entity Marketplace
-database SmartContract
-database MongoDB
-actor Entrepreneur
-
-Marketplace -> MongoDB: Retrieves entrepreneurs data
-ServiceBuyer -> Marketplace: viewServices()
-Marketplace --> MongoDB: sortsServices()
-Marketplace --> SmartContract: sortsServices()
-MongoDB --> Marketplace 
-SmartContract --> Marketplace
-ServiceBuyer -> Marketplace: Buys service
-ServiceBuyer --> SmartContract: Choice of crypto
-ServiceBuyer --> MongoDB: Choice of fiat
-ServiceBuyer -> SmartContract: Signs contract
-SmartContract -> Entrepreneur: Notifies
-Entrepreneur -> ServiceBuyer: initiates service, gets in contact, begins work
-ServiceBuyer -> Entrepreneur: Agrees on completed service
-
-SmartContract -> Entrepreneur: Payment escrow is delivered
-SmartContract -> Marketplace: Expands portfolio
-Marketplace -> MongoDB: Updates portfolio
-
-
-
-```
-
-```plantuml
-!theme plain
-actor ServiceBuyer
-entity Marketplace
-database SmartContract
-database MongoDB
-actor Entrepreneur
-
-Entrepreneur -> Marketplace: Joins marketplace
-Entrepreneur -> Marketplace: createsListing()
-Entrepreneur -> MongoDB
-Entrepreneur -> SmartContract
-
-Marketplace -> MongoDB: Retrieves entrepreneurs data
-ServiceBuyer -> Marketplace: viewServices()
-Marketplace --> MongoDB: sortsServices()
-Marketplace --> SmartContract: sortsServices()
-MongoDB --> Marketplace 
-SmartContract --> Marketplace
-ServiceBuyer -> Marketplace: Buys service
-ServiceBuyer --> SmartContract: Choice of crypto
-ServiceBuyer --> MongoDB: Choice of fiat
-ServiceBuyer -> SmartContract: Signs contract
-SmartContract -> Entrepreneur: Notifies
-Entrepreneur -> ServiceBuyer: initiates service, gets in contact, begins work
-ServiceBuyer -> Entrepreneur: Agrees on completed service
-
-SmartContract -> Entrepreneur: Payment escrow is delivered
-Entrepreneur -> SmartContract: Confirms receipt
-Entrepreneur -> Marketplace: Updates service status
-Marketplace -> MongoDB: Records transaction
-SmartContract -> Marketplace: Reports completion
-Marketplace -> ServiceBuyer: Updates service record
-
-
-```
 
 
 # Related Works
