@@ -6,11 +6,14 @@
   import { NetworkType } from "@airgap/beacon-sdk";
   import { COMPANY, MARKETPLACE_TYPE, WEB3_RPC_URL } from "../../MarketplaceVariables.js";
 
+  let userAddress: string = '';
+  console.log(userAddress)
+
 type ExtendedFormData = {
   location: string;
   service: string;
   description: string;
-  price: number;
+  price: string | number;
   email: string;
   wallet: string;
   title: string;
@@ -19,14 +22,14 @@ type ExtendedFormData = {
 };
 
 const initialFormData: ExtendedFormData = {
-  location: '',
-  service: '',
-  description: '',
-  price: undefined, // Assuming price is a number, not a string
-  email: '',
-  wallet: '',
+  location: 'Test',
+  service: 'Test',
+  description: 'Test',
+  price: 'Price', // Assuming price is a number, not a string
+  email: 'Email',
+  wallet: userAddress,
   title: '',
-  imageDescription: '',
+  imageDescription: 'Test',
   files: undefined,
 };
 
@@ -36,7 +39,6 @@ const initialFormData: ExtendedFormData = {
     name: "Create NFTs",
     preferredNetwork: NetworkType.GHOSTNET,
   };
-  let userAddress: string = '';
 
   let formData = {...initialFormData};
   formData = {...initialFormData};
@@ -141,7 +143,8 @@ const submitToMongoDB = async () => {
   };
 
   // Function to mint NFT
-  const mintNFT = async () => {
+  const upload = async () => {
+    console.log("Minting NFT...");
     const nftData = new FormData();
     nftData.append("image", files[0]);
     nftData.append("title", title);
@@ -169,14 +172,13 @@ const submitToMongoDB = async () => {
   const handleSubmit = async () => {
     try {
       await submitToMongoDB();
-      await mintNFT();
-      // Optional: Reset the form here
+      await upload(); // Replaced mintNFT with upload
       formData = {...initialFormData};
     } catch (error) {
       console.error("Error:", error);
       alert('Failed to submit the form and/or mint NFT.');
     }
-  };
+}
 
 </script>
 
@@ -222,31 +224,25 @@ const submitToMongoDB = async () => {
   <div class="container">
     <h1>THE {MARKETPLACE_TYPE} MARKETPLACE</h1>
     {#if userAddress}
-      <form on:submit|preventDefault={handleSubmit}>
+      <form  on:submit|preventDefault={handleSubmit}>
         <input hidden type="text" id="wallet" bind:value={userAddress} />
-        <label for="image-title">Title:</label>
-        <input type="text" id="image-title" bind:value={title} />
+        
+        <input type="text" class="block" id="image-title" placeholder="Title" bind:value={title} />
 
 
-        <label for="location">Location:</label>
-        <input type="text" id="location" bind:value={formData.location} />
+        <input type="text" id="location"  class="block" placeholder="Location" bind:value={formData.location} />
 
-        <label for="service">Service:</label>
-        <input type="text" id="service" bind:value={formData.service} />
+        <input type="text" id="service" class="block" placeholder="Service" bind:value={formData.service} />
 
-        <label for="description">Description:</label>
-        <textarea id="description" bind:value={description}></textarea>
+        <textarea id="description" class="block" placeholder="Description" bind:value={description}></textarea>
 
-        <label for="price">Price:</label>
-        <input type="number" id="price" bind:value={formData.price} />
+        <input type="number" id="price"  class="block" placeholder="Price Of Total Service" bind:value={formData.price} />
 
-        <label for="email">Email:</label>
-        <input type="email" id="email" bind:value={formData.email} />
+        <input type="email" id="email" class="block" placeholder="Email for contact" bind:value={formData.email} />
 
-        <label for="file">Select Image:</label>
-        <input type="file" id="file" bind:files />
+        <input type="file" id="file" class="block"  placeholder="Attachments" bind:files />
 
-        <button type="submit" class="trueno" on:click={handleSubmit}>Submit</button>
+        <button type="submit" class="trueno functionbutton" on:click={handleSubmit}>Submit</button>
       </form>
 
       {#if newNft}
