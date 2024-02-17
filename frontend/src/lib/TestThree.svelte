@@ -6,35 +6,6 @@
   import { NetworkType } from "@airgap/beacon-sdk";
   import { COMPANY, MARKETPLACE_TYPE, WEB3_RPC_URL} from "../../MarketplaceVariables.js"
 
-   type ExtendedFormData = {
-  location: string;
-  service: string;
-  description: string;
-  price: string | number;
-  email: string;
-  wallet: string;
-  title: string;
-  files: FileList | null;
-};
-
-  let service: string = '';
-  let location: string = '';
-  let price: string = '';
-  let email: string = '';
-  let title: string = '';
-  let description: string = '';
-  let files: FileList | null = null;
-
-const initialFormData: ExtendedFormData = {
-  location: '',
-  service: '',
-  description: '',
-  price: '', // Assuming price is a number, not a string
-  email: '',
-  wallet: '',
-  title: '',
-  files: undefined,
-};
 
   let Tezos: TezosToolkit;
   let wallet: BeaconWallet;
@@ -43,41 +14,16 @@ const initialFormData: ExtendedFormData = {
     preferredNetwork: NetworkType.GHOSTNET
   };
   let userAddress: string;
+  let files, title, description;
 
   if (process.env.NODE_ENV === "dev") {
     title = "uranus";
     description = "this is Uranus";
   }
 
- $: formData = {
-    location: location,
-    service: service,
-    description: description,
-    price: price,
-    email: email,
-    wallet: userAddress,
-    title: title,
-    files: files,
-    
-    };
+
   
-  const submitToMongoDB = async () => {
-      console.log(formData)
-    const response = await fetch('http://localhost:5000/submitForm', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(formData),
-    });
 
-    if (!response.ok) {
-      throw new Error('Failed to submit to MongoDB');
-    }
-
-    const result = await response.json();
-    console.log("MongoDB Submission Result:", result);
-  };
 
   const rpcUrl = `${WEB3_RPC_URL}`;
 
@@ -148,7 +94,6 @@ const getUserNfts = async (address: string) => {
   };
 
   const upload = async () => {
-
     try {
       pinningMetadata = true;
       const data = new FormData();
@@ -205,8 +150,6 @@ const getUserNfts = async (address: string) => {
       pinningMetadata = false;
       mintingToken = false;
     }
-    submitToMongoDB();
-
   };
 
   onMount(async () => {
@@ -219,7 +162,6 @@ const getUserNfts = async (address: string) => {
       await getUserNfts(userAddress);
     }
   });
-  
 </script>
 
 <style lang="scss">
@@ -258,33 +200,37 @@ const getUserNfts = async (address: string) => {
       align-items: center;
     }
   }
-
-  
 </style>
 
 <main>
   <div class="container">
     <h1>THE {MARKETPLACE_TYPE} MARKETPLACE</h1>
     {#if userAddress}
-    <div>
-  <div class="user-nfts">
-    Your Web3 Services:
-    {#if nftStorage && userNfts.length > 0}
-      <select class="dropdown">
-        {#each userNfts as nft}
-          <option value={nft.tokenId}>
-            <a href={`https://cloudflare-ipfs.com/ipfs/${nft.ipfsHash}`} target="_blank" rel="noopener noreferrer nofollow">
-              Listing {nft.tokenId}
-            </a>
-          </option>
-        {/each}
-      </select>
-    {:else}
-      <p>No Web3 Services found for your wallet.</p>
-    {/if}
-</div>
+      <div>
+        <div class="user-nfts">
+          Your Web3 Services:
+          {#if nftStorage && userNfts.length > 0}
+            <ul>
+              {#each userNfts as nft}
+                <ol>
+                  <a
+                href={`https://cloudflare-ipfs.com/ipfs/${nft.ipfsHash}`}
+                    target="_blank"
+                    rel="noopener noreferrer nofollow"
+                  >
+                    Listing {nft.tokenId}
+                  </a>
+                  <!-- Additional NFT details can be added here -->
+                </ol>
+              {/each}
+            </ul>
+          {:else}
+            <p>No Web3 Services found for your wallet.</p>
+          {/if}
+        </div>
         <br />
-
+        <button class="trueno functionbutton" on:click={disconnect}>Log out</button>
+        <button class="trueno functionbutton" on:click={disconnect}>Change Accounts</button>
       </div>
       {#if newNft}
         <div>Your NFT has been successfully minted!</div>
@@ -329,7 +275,7 @@ const getUserNfts = async (address: string) => {
         <div>
           <label for="image-title">
             <span>Title:</span>
-            <input type="text" placeholder="Professional kitchen remodelling" id="image-title" bind:value={title} />
+            <input type="text" id="image-title" bind:value={title} />
           </label>
         </div>
         <div>
@@ -338,55 +284,10 @@ const getUserNfts = async (address: string) => {
             <textarea
               id="image-description"
               rows="4"
-              placeholder="A professional kitchen remodelling service. We offer a full range of services from design to installation. We are a team of experienced professionals who are passionate about what we do. We are committed"
               bind:value={description}
             />
           </label>
         </div>
-                   
-        <div>
-          <label for="service">
-            <span>Service:</span>
-            <input type="text" placeholder="Kitchen Remodelling" bind:value={service} />
-
-          </label>
-        </div>
-
-                <div>
-          <label for="price">
-            <span>Price:</span>
-            <input
-              id="price"
-              bind:value={price}
-              type="number"
-              placeholder="zł"
-            />
-          </label>
-        </div>
-
-                <div>
-          <label for="service">
-            <span>Location:</span>
-            <input
-              id="location"
-              placeholder="Poland, Lublin"
-              bind:value={location}
-            />
-          </label>
-        </div>
-
-                        <div>
-          <label for="service">
-            <span>Primary contact:</span>
-            <input
-              id="email"
-              placeholder="@gmail, @yahoo, @protonmail"
-              bind:value={email}
-            />
-          </label>
-        </div>
-       
-       
         <div>
           {#if pinningMetadata}
             <button class="trueno"> Saving your image... </button>
@@ -402,7 +303,7 @@ const getUserNfts = async (address: string) => {
       <button class="trueno functionbutton" on:click={connect}>Create Listing</button>
       
     {/if}
-    <p>The {COMPANY} </p>
-    <button class="trueno functionbutton" on:click={disconnect}>Change Accounts</button>
-</div>
+  </div>
+      <p>The {COMPANY} </p>
+
 </main>
