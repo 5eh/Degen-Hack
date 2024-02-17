@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "jsx": "preserve",
+    "module": "commonjs",
+    "target": "esnext",
+    "moduleResolution": "node"
+    // ... other options
+  }
+  // ... other settings
+}
